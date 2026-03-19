@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Mood Meter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🎬</div>
+            <div class="title">Movie Mood Meter</div>
+            <div class="desc">Enter a movie review below to instantly detect its sentiment and confidence.</div>
+        </div>
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+        <form method="post" novalidate>
+            <label for="review">Movie Review</label>
+            <textarea id="review" name="review" placeholder="e.g. A visually stunning film with a heartfelt story and memorable performances." required>{{ review_text }}</textarea>
+            <button type="submit" class="btn-analyze">Analyze</button>
+        </form>
+        <div class="info">Your review is never stored or shared.</div>
+        {% if result %}
+        <div class="result">
+            <div class="sentiment {% if result.label == 'Positive' %}positive{% else %}negative{% endif %}">
+                {{ result.label }}
+            </div>
+            <div class="score-row">
+                <div><span class="score-label">Score:</span> <span class="score-value">{{ result.score }}</span></div>
+                <div><span class="score-label">P(Positive):</span> <span class="score-value">{{ result.probability }}</span></div>
+            </div>
+            <div class="info">A score near 1 means positive, near 0 or negative means negative.</div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
